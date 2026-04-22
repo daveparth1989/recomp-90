@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>RECOMP/90 — Parth's 90-Day Periodized Program</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   RECOMP/90  —  Design Tokens
+   ============================================================ */
+:root{
+  --bg: #0a0a0a;
+  --bg-2: #121212;
+  --surface: #1a1a1a;
+  --surface-2: #222;
+  --surface-3: #2a2a2a;
+  --border: #2e2e2e;
+  --border-bright: #3a3a3a;
+  --text: #f5f5f5;
+  --text-dim: #8b8b8b;
+  --text-faint: #5a5a5a;
+  --accent: #d4ff2b;       /* electric lime */
+  --accent-dim: #a8cc1f;
+  --danger: #ff4d4d;
+  --success: #4ade80;
+  --warn: #fbbf24;
+  --font-display: 'Barlow Condensed', Impact, sans-serif;
+  --font-body: 'DM Sans', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-height:1.5;-webkit-font-smoothing:antialiased}
+body{
+  background:
+    radial-gradient(1200px 600px at 10% -10%, rgba(212,255,43,0.05), transparent 60%),
+    radial-gradient(800px 400px at 120% 100%, rgba(212,255,43,0.03), transparent 60%),
+    var(--bg);
+  min-height:100vh;
+  padding-bottom:80px;
+}
+/* subtle grain */
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:100;opacity:.04;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence baseFrequency='0.85' numOctaves='3'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+.wrap{max-width:1180px;margin:0 auto;padding:24px}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+.brandbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 0;border-bottom:1px solid var(--border);margin-bottom:28px;
+}
+.logo{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-weight:900;font-size:22px;letter-spacing:.02em}
+.logo .dot{width:10px;height:10px;background:var(--accent);border-radius:50%;box-shadow:0 0 12px var(--accent)}
+.brandbar nav{display:flex;gap:22px;font-size:13px;color:var(--text-dim);font-weight:500}
+.brandbar nav a{color:inherit;text-decoration:none;cursor:pointer;transition:color .15s}
+.brandbar nav a:hover{color:var(--accent)}
+@media (max-width: 720px){ .brandbar nav{display:none} }
+
+/* HERO */
+.hero{
+  position:relative;padding:48px 36px;border:1px solid var(--border);
+  background:linear-gradient(135deg,#161616 0%,#0d0d0d 100%);
+  overflow:hidden;margin-bottom:36px;
+}
+.hero::before{
+  content:"";position:absolute;top:-50%;right:-20%;width:600px;height:600px;
+  background:radial-gradient(circle,rgba(212,255,43,0.12),transparent 70%);
+  filter:blur(40px);
+}
+.hero-kicker{
+  font-family:var(--font-mono);font-size:11px;color:var(--accent);
+  letter-spacing:.25em;text-transform:uppercase;margin-bottom:18px;
+}
+.hero h1{
+  font-family:var(--font-display);font-weight:900;
+  font-size:clamp(52px, 9vw, 112px);line-height:.9;letter-spacing:-.01em;
+  text-transform:uppercase;margin-bottom:18px;
+}
+.hero h1 .slash{color:var(--accent)}
+.hero .tag{font-size:17px;color:var(--text-dim);max-width:640px;margin-bottom:32px}
+
+.stats-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:1px;
+  background:var(--border);border:1px solid var(--border);margin-top:20px;
+}
+.stat{background:var(--bg-2);padding:18px 20px}
+.stat .k{font-family:var(--font-mono);font-size:10px;color:var(--text-faint);text-transform:uppercase;letter-spacing:.18em;margin-bottom:6px}
+.stat .v{font-family:var(--font-display);font-weight:700;font-size:26px;color:var(--text)}
+.stat .v .u{font-size:13px;color:var(--text-dim);font-weight:500;margin-left:2px}
+
+/* ============================================================
+   SECTION HEADERS
+   ============================================================ */
+.section{margin:56px 0 28px}
+.section-head{display:flex;align-items:baseline;gap:16px;margin-bottom:22px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+.section-num{font-family:var(--font-mono);font-size:12px;color:var(--accent);letter-spacing:.2em}
+.section-title{font-family:var(--font-display);font-weight:800;font-size:36px;text-transform:uppercase;letter-spacing:.01em}
+
+/* ============================================================
+   HABIT CARD
+   ============================================================ */
+.habit-card{
+  position:relative;padding:32px 36px;border:1px solid var(--accent);
+  background:linear-gradient(135deg,rgba(212,255,43,0.08) 0%,rgba(212,255,43,0.02) 100%);
+}
+.habit-card .label{font-family:var(--font-mono);font-size:10px;color:var(--accent);letter-spacing:.28em;text-transform:uppercase;margin-bottom:14px}
+.habit-card .headline{font-family:var(--font-display);font-weight:900;font-size:clamp(32px,5vw,54px);line-height:1;text-transform:uppercase;margin-bottom:16px}
+.habit-card .headline em{color:var(--accent);font-style:normal}
+.habit-card p{color:var(--text-dim);max-width:720px;margin-bottom:10px;font-size:15px}
+.habit-card .num{
+  position:absolute;right:-10px;top:-30px;font-family:var(--font-display);font-weight:900;
+  font-size:220px;color:rgba(212,255,43,0.08);line-height:1;pointer-events:none;user-select:none;
+}
+@media(max-width:720px){.habit-card .num{font-size:140px;top:-10px;right:0}}
+
+/* ============================================================
+   PHASE CARDS
+   ============================================================ */
+.phases{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.phase{
+  background:var(--surface);border:1px solid var(--border);
+  padding:26px 24px;position:relative;overflow:hidden;
+  transition:border-color .2s, transform .2s;
+}
+.phase:hover{border-color:var(--border-bright);transform:translateY(-2px)}
+.phase .idx{
+  position:absolute;top:14px;right:18px;font-family:var(--font-mono);font-size:11px;
+  color:var(--text-faint);letter-spacing:.2em;
+}
+.phase .weeks{font-family:var(--font-mono);font-size:11px;color:var(--accent);letter-spacing:.2em;margin-bottom:10px}
+.phase .name{font-family:var(--font-display);font-weight:800;font-size:26px;text-transform:uppercase;margin-bottom:14px;line-height:1.05}
+.phase ul{list-style:none;margin-top:14px;border-top:1px solid var(--border);padding-top:14px}
+.phase ul li{font-size:13.5px;color:var(--text-dim);padding:7px 0;display:flex;gap:10px}
+.phase ul li::before{content:"▸";color:var(--accent);flex-shrink:0}
+.phase ul li strong{color:var(--text);font-weight:500}
+
+/* ============================================================
+   WEEK STRIP (progression visualization)
+   ============================================================ */
+.weekstrip{display:grid;grid-template-columns:repeat(12,1fr);gap:4px;margin-top:18px}
+.weekbox{
+  aspect-ratio:1;background:var(--surface);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;position:relative;
+  font-family:var(--font-mono);font-size:12px;font-weight:700;color:var(--text-dim);
+}
+.weekbox.build{background:linear-gradient(180deg,var(--surface-2),var(--surface))}
+.weekbox.deload{background:rgba(251,191,36,.1);color:var(--warn);border-color:var(--warn)}
+.weekbox.peak{background:rgba(212,255,43,.15);color:var(--accent);border-color:var(--accent)}
+.weekstrip-legend{display:flex;gap:18px;margin-top:12px;font-family:var(--font-mono);font-size:11px;color:var(--text-dim);flex-wrap:wrap}
+.weekstrip-legend .sw{display:inline-block;width:10px;height:10px;margin-right:6px;vertical-align:middle;border:1px solid}
+.weekstrip-legend .sw.b{background:var(--surface-2);border-color:var(--border)}
+.weekstrip-legend .sw.d{background:rgba(251,191,36,.1);border-color:var(--warn)}
+.weekstrip-legend .sw.p{background:rgba(212,255,43,.15);border-color:var(--accent)}
+
+/* ============================================================
+   SPLIT TABLE
+   ============================================================ */
+.split{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--border);border:1px solid var(--border)}
+.dcol{background:var(--surface);padding:16px 14px;min-height:120px}
+.dcol .day{font-family:var(--font-mono);font-size:10px;color:var(--text-faint);letter-spacing:.2em;margin-bottom:8px}
+.dcol .title{font-family:var(--font-display);font-weight:800;font-size:20px;text-transform:uppercase;line-height:1.1;margin-bottom:10px}
+.dcol .title.rest{color:var(--text-faint)}
+.dcol .title.focus{color:var(--accent)}
+.dcol .sub{font-size:12px;color:var(--text-dim);line-height:1.4}
+@media(max-width:720px){.split{grid-template-columns:repeat(2,1fr)}}
+
+/* ============================================================
+   NUTRITION
+   ============================================================ */
+.macros{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:18px}
+.macro{padding:22px 20px;background:var(--surface);border:1px solid var(--border);position:relative}
+.macro .n{font-family:var(--font-mono);font-size:11px;color:var(--text-faint);letter-spacing:.2em;margin-bottom:8px}
+.macro .big{font-family:var(--font-display);font-weight:800;font-size:38px;line-height:1}
+.macro .big .unit{font-size:14px;color:var(--text-dim);margin-left:4px}
+.macro .desc{font-size:12px;color:var(--text-dim);margin-top:8px}
+.macro.accent{border-color:var(--accent)}
+.macro.accent .big{color:var(--accent)}
+
+.rules{margin-top:20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1px;background:var(--border);border:1px solid var(--border)}
+.rule{background:var(--surface);padding:18px 20px}
+.rule .n{font-family:var(--font-mono);font-size:11px;color:var(--accent);letter-spacing:.2em;margin-bottom:6px}
+.rule .t{font-weight:600;margin-bottom:4px}
+.rule .d{color:var(--text-dim);font-size:13px}
+
+/* ============================================================
+   TRACKER
+   ============================================================ */
+.tracker{border:1px solid var(--border);background:var(--surface);margin-top:10px}
+.tracker-top{
+  display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;
+  padding:16px 20px;border-bottom:1px solid var(--border);background:var(--bg-2);
+}
+.tracker-top .left{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.tracker-top .right{display:flex;gap:8px;align-items:center}
+
+.selector{
+  display:inline-flex;align-items:center;gap:6px;background:var(--bg);border:1px solid var(--border);
+  padding:4px;
+}
+.selector label{font-family:var(--font-mono);font-size:10px;color:var(--text-faint);letter-spacing:.18em;text-transform:uppercase;padding:0 6px}
+.selector select{
+  background:transparent;color:var(--text);border:0;outline:none;
+  font-family:var(--font-mono);font-weight:700;font-size:13px;padding:6px 20px 6px 8px;
+  cursor:pointer;appearance:none;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M0 0l5 6 5-6z' fill='%23d4ff2b'/></svg>");
+  background-repeat:no-repeat;background-position:right 6px center;
+}
+
+.phasepill{
+  font-family:var(--font-mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  padding:6px 10px;border:1px solid var(--accent);color:var(--accent);
+}
+.phasepill.deload{border-color:var(--warn);color:var(--warn)}
+.phasepill.peak{border-color:var(--accent);color:var(--accent);background:rgba(212,255,43,.08)}
+
+.btn{
+  font-family:var(--font-mono);font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;
+  padding:9px 14px;background:var(--accent);color:#000;border:0;cursor:pointer;transition:all .15s;
+}
+.btn:hover{background:#fff}
+.btn.ghost{background:transparent;color:var(--text);border:1px solid var(--border-bright)}
+.btn.ghost:hover{border-color:var(--accent);color:var(--accent);background:transparent}
+.btn.danger{background:var(--danger);color:#fff}
+.btn.danger:hover{background:#fff;color:var(--danger)}
+.btn.sm{padding:6px 10px;font-size:10px}
+
+/* DAY TABS */
+.daytabs{display:flex;border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none}
+.daytabs::-webkit-scrollbar{display:none}
+.daytab{
+  flex:1;min-width:110px;padding:16px 12px;background:transparent;border:0;cursor:pointer;
+  font-family:var(--font-display);font-weight:800;font-size:18px;text-transform:uppercase;letter-spacing:.02em;
+  color:var(--text-dim);border-bottom:3px solid transparent;transition:all .15s;
+}
+.daytab:hover{color:var(--text)}
+.daytab.active{color:var(--accent);border-bottom-color:var(--accent);background:var(--bg-2)}
+.daytab .num{font-family:var(--font-mono);font-size:10px;display:block;color:var(--text-faint);letter-spacing:.2em;margin-bottom:2px;font-weight:500}
+.daytab.active .num{color:var(--accent)}
+
+/* EXERCISE LIST */
+.exlist{padding:20px}
+.ex{
+  background:var(--bg-2);border:1px solid var(--border);margin-bottom:14px;
+  transition:border-color .2s;
+}
+.ex:hover{border-color:var(--border-bright)}
+.ex-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:10px;padding:14px 18px;border-bottom:1px solid var(--border);background:var(--surface)}
+.ex-name{font-family:var(--font-display);font-weight:800;font-size:22px;text-transform:uppercase;letter-spacing:.01em}
+.ex-target{font-family:var(--font-mono);font-size:11px;color:var(--accent);letter-spacing:.15em;text-transform:uppercase}
+.ex-note{font-size:12px;color:var(--text-dim);width:100%;margin-top:2px}
+
+.ex-last{
+  padding:8px 18px;background:rgba(212,255,43,.04);border-bottom:1px solid var(--border);
+  font-family:var(--font-mono);font-size:11px;color:var(--text-dim);display:flex;flex-wrap:wrap;gap:16px;
+}
+.ex-last .pill{color:var(--accent)}
+.ex-last .baseline-pill{color:var(--warn)}
+
+.setgrid{padding:14px 18px;display:grid;grid-template-columns:36px 1fr 1fr 42px;gap:8px;align-items:center}
+.setgrid .hdr{font-family:var(--font-mono);font-size:10px;color:var(--text-faint);letter-spacing:.18em;text-transform:uppercase;padding:4px 0}
+.setgrid .setnum{font-family:var(--font-mono);font-weight:700;color:var(--text-dim);font-size:13px;text-align:center}
+.setgrid input{
+  background:var(--bg);border:1px solid var(--border);color:var(--text);
+  font-family:var(--font-mono);font-weight:700;font-size:15px;
+  padding:10px 12px;width:100%;outline:none;transition:border-color .15s, background .15s;
+}
+.setgrid input:focus{border-color:var(--accent);background:#111}
+.setgrid input.filled{border-color:var(--accent-dim)}
+.setgrid .donecell{display:flex;justify-content:center}
+.setgrid .check{
+  width:30px;height:30px;border:1px solid var(--border-bright);background:var(--bg);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  font-size:16px;color:var(--text-faint);transition:all .15s;
+}
+.setgrid .check.on{background:var(--accent);color:#000;border-color:var(--accent)}
+
+/* BODYWEIGHT & NOTES */
+.extras{padding:20px;border-top:1px solid var(--border);background:var(--bg-2);display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:720px){.extras{grid-template-columns:1fr}}
+.field label{display:block;font-family:var(--font-mono);font-size:10px;color:var(--text-faint);letter-spacing:.18em;text-transform:uppercase;margin-bottom:6px}
+.field input, .field textarea{
+  width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);
+  font-family:var(--font-mono);font-weight:500;font-size:14px;padding:10px 12px;outline:none;
+  font-family:var(--font-body);
+}
+.field input:focus, .field textarea:focus{border-color:var(--accent)}
+.field textarea{min-height:60px;resize:vertical}
+
+/* FOOTER BAR */
+.bottombar{
+  position:sticky;bottom:0;z-index:50;background:rgba(10,10,10,.9);backdrop-filter:blur(8px);
+  border-top:1px solid var(--border);padding:12px 20px;
+  display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-top:10px;
+}
+.savestate{font-family:var(--font-mono);font-size:11px;color:var(--text-dim);letter-spacing:.1em}
+.savestate .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--success);margin-right:6px;vertical-align:middle}
+.savestate.unsaved .dot{background:var(--warn)}
+
+/* RESET MODAL */
+.modal-backdrop{
+  position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;
+  display:none;align-items:center;justify-content:center;padding:20px;
+  backdrop-filter:blur(4px);
+}
+.modal-backdrop.open{display:flex}
+.modal{background:var(--surface);border:1px solid var(--accent);max-width:480px;width:100%;padding:28px}
+.modal h3{font-family:var(--font-display);font-weight:800;font-size:26px;text-transform:uppercase;margin-bottom:12px}
+.modal p{color:var(--text-dim);font-size:14px;margin-bottom:14px;line-height:1.55}
+.modal .actions{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+
+/* TOAST */
+.toast{
+  position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(100px);
+  background:var(--accent);color:#000;padding:12px 22px;font-family:var(--font-mono);font-size:12px;
+  font-weight:700;letter-spacing:.15em;text-transform:uppercase;z-index:300;
+  transition:transform .3s cubic-bezier(.2,.8,.2,1);pointer-events:none;
+}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* COLLAPSIBLE PROGRAM CONTENT */
+.collapser{margin-top:8px}
+.collapser summary{
+  list-style:none;cursor:pointer;padding:12px 16px;background:var(--surface);border:1px solid var(--border);
+  font-family:var(--font-mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim);
+  display:flex;justify-content:space-between;align-items:center;
+}
+.collapser summary::-webkit-details-marker{display:none}
+.collapser summary::after{content:"+";color:var(--accent);font-weight:700;font-size:16px}
+.collapser[open] summary::after{content:"−"}
+
+/* HISTORY TABLE (progress view) */
+.hist-wrap{padding:20px;border-top:1px solid var(--border);display:none}
+.hist-wrap.on{display:block}
+.hist-wrap h4{font-family:var(--font-display);font-weight:800;font-size:20px;text-transform:uppercase;margin-bottom:10px}
+.hist-table{width:100%;border-collapse:collapse;font-family:var(--font-mono);font-size:12px}
+.hist-table th, .hist-table td{padding:6px 10px;border-bottom:1px solid var(--border);text-align:left}
+.hist-table th{color:var(--text-faint);font-weight:500;letter-spacing:.12em;text-transform:uppercase;font-size:10px}
+
+/* FINISHER/NOTE BANNER */
+.banner{padding:14px 18px;background:rgba(251,191,36,.06);border-left:3px solid var(--warn);margin:14px 0;font-size:13px;color:var(--text-dim)}
+.banner strong{color:var(--warn);font-weight:700}
+.banner.peak{background:rgba(212,255,43,.06);border-color:var(--accent)}
+.banner.peak strong{color:var(--accent)}
+
+/* FOOTER */
+footer{margin-top:60px;padding-top:24px;border-top:1px solid var(--border);font-family:var(--font-mono);font-size:11px;color:var(--text-faint);letter-spacing:.1em;text-align:center}
+
+/* Print styles */
+@media print {
+  body{background:#fff;color:#000}
+  .tracker, .bottombar, .modal-backdrop{display:none !important}
+  .hero{background:#fff;color:#000}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- =================== BRAND BAR =================== -->
+  <div class="brandbar">
+    <div class="logo"><span class="dot"></span>RECOMP<span style="color:var(--accent)">/</span>90</div>
+    <nav>
+      <a onclick="document.getElementById('habit').scrollIntoView({behavior:'smooth'})">Habit</a>
+      <a onclick="document.getElementById('phases').scrollIntoView({behavior:'smooth'})">Phases</a>
+      <a onclick="document.getElementById('split').scrollIntoView({behavior:'smooth'})">Split</a>
+      <a onclick="document.getElementById('nutrition').scrollIntoView({behavior:'smooth'})">Nutrition</a>
+      <a onclick="document.getElementById('tracker').scrollIntoView({behavior:'smooth'})">Tracker</a>
+    </nav>
+  </div>
+
+  <!-- =================== HERO =================== -->
+  <section class="hero">
+    <div class="hero-kicker">// 90-Day Periodized Program · Parth · Melbourne</div>
+    <h1>Leaner<span class="slash">/</span>Stronger<br>By Day 90.</h1>
+    <p class="tag">A 5-day Push·Pull·Legs·Upper·Lower split built for simultaneous fat loss and muscle retention. Three 4-week waves. Structured deloads. Auto-regulating progression. Designed for a 92 → 85 kg body recomposition.</p>
+    <div class="stats-grid">
+      <div class="stat"><div class="k">Start</div><div class="v">92<span class="u">kg</span></div></div>
+      <div class="stat"><div class="k">Target</div><div class="v">85<span class="u">kg</span></div></div>
+      <div class="stat"><div class="k">Height</div><div class="v">183<span class="u">cm</span></div></div>
+      <div class="stat"><div class="k">Start BF</div><div class="v">23<span class="u">%</span></div></div>
+      <div class="stat"><div class="k">Sessions</div><div class="v">5<span class="u">/wk</span></div></div>
+      <div class="stat"><div class="k">Duration</div><div class="v">12<span class="u">wks</span></div></div>
+    </div>
+  </section>
+
+  <!-- =================== THE HABIT =================== -->
+  <section id="habit" class="section">
+    <div class="section-head">
+      <div class="section-num">01</div>
+      <h2 class="section-title">The Single Habit</h2>
+    </div>
+    <div class="habit-card">
+      <div class="num">01</div>
+      <div class="label">// The one thing that makes or breaks your results</div>
+      <div class="headline">Hit your <em>protein</em><br>every single day.</div>
+      <p><strong style="color:var(--text)">Target: 180–200 g protein/day</strong> (≈2.0–2.2 g/kg bodyweight). In a calorie deficit, protein is what prevents your 7 kg drop from being half-muscle. It's also the most satiating macro — so you will spontaneously eat less junk when you hit it early in the day.</p>
+      <p>Not training, not cardio, not supplements. If you only get one thing right for 90 days, make it this. Weigh your protein sources. Front-load protein at breakfast (40g+). The scale can fluctuate, sleep can wobble, cardio can be missed — protein is non-negotiable.</p>
+    </div>
+  </section>
+
+  <!-- =================== PHASES =================== -->
+  <section id="phases" class="section">
+    <div class="section-head">
+      <div class="section-num">02</div>
+      <h2 class="section-title">The Three Phases</h2>
+    </div>
+
+    <div class="phases">
+      <div class="phase">
+        <div class="idx">01 / 03</div>
+        <div class="weeks">WEEKS 1–4</div>
+        <div class="name">Metabolic<br>Hypertrophy</div>
+        <ul>
+          <li><strong>Compounds:</strong> 4 × 8–10 @ RPE 7–8</li>
+          <li><strong>Accessories:</strong> 3 × 10–15 @ RPE 8–9</li>
+          <li><strong>Rest:</strong> 90s compounds · 60s isolations</li>
+          <li><strong>Goal:</strong> Work capacity + movement quality</li>
+          <li><strong>Cardio:</strong> 2× Zone 2 · 30 min</li>
+          <li><strong>Deload:</strong> Week 4 (½ volume)</li>
+        </ul>
+      </div>
+
+      <div class="phase">
+        <div class="idx">02 / 03</div>
+        <div class="weeks">WEEKS 5–8</div>
+        <div class="name">Strength<br>Hypertrophy</div>
+        <ul>
+          <li><strong>Compounds:</strong> 4 × 6–8 @ RPE 8</li>
+          <li><strong>Accessories:</strong> 3 × 8–12 @ RPE 8–9</li>
+          <li><strong>Rest:</strong> 2–3 min compounds · 75s isolations</li>
+          <li><strong>Goal:</strong> Overload the main lifts; add strength</li>
+          <li><strong>Cardio:</strong> 2× Zone 2 · 1× HIIT (optional)</li>
+          <li><strong>Deload:</strong> Week 8 (½ volume)</li>
+        </ul>
+      </div>
+
+      <div class="phase">
+        <div class="idx">03 / 03</div>
+        <div class="weeks">WEEKS 9–12</div>
+        <div class="name">Peak<br>Definition</div>
+        <ul>
+          <li><strong>Compounds:</strong> 5 × 4–6 @ RPE 8–9</li>
+          <li><strong>Accessories:</strong> 3 × 10–15 + intensity techniques</li>
+          <li><strong>Rest:</strong> 3 min compounds · 45–60s isolations</li>
+          <li><strong>Goal:</strong> Preserve muscle · accelerate fat loss</li>
+          <li><strong>Cardio:</strong> 3× Zone 2 · 2× 10-min finishers</li>
+          <li><strong>Peak week:</strong> Week 12 (test + photos)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="margin-top:32px">
+      <div style="font-family:var(--font-mono);font-size:11px;color:var(--text-dim);letter-spacing:.2em;text-transform:uppercase;margin-bottom:8px">Periodization Map</div>
+      <div class="weekstrip" id="weekstrip"></div>
+      <div class="weekstrip-legend">
+        <span><span class="sw b"></span>Build</span>
+        <span><span class="sw d"></span>Deload (Week 4, 8)</span>
+        <span><span class="sw p"></span>Peak Test (Week 12)</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================== SPLIT =================== -->
+  <section id="split" class="section">
+    <div class="section-head">
+      <div class="section-num">03</div>
+      <h2 class="section-title">Weekly Split</h2>
+    </div>
+    <div class="split">
+      <div class="dcol"><div class="day">MON</div><div class="title focus">Push</div><div class="sub">Chest · Shoulders · Triceps</div></div>
+      <div class="dcol"><div class="day">TUE</div><div class="title focus">Pull</div><div class="sub">Back · Biceps · Rear Delts</div></div>
+      <div class="dcol"><div class="day">WED</div><div class="title focus">Legs</div><div class="sub">Quad-dominant + Core</div></div>
+      <div class="dcol"><div class="day">THU</div><div class="title rest">Rest</div><div class="sub">Walk · mobility · sleep</div></div>
+      <div class="dcol"><div class="day">FRI</div><div class="title focus">Upper</div><div class="sub">Weak-point focus</div></div>
+      <div class="dcol"><div class="day">SAT</div><div class="title focus">Lower</div><div class="sub">Posterior chain + Metabolic</div></div>
+      <div class="dcol"><div class="day">SUN</div><div class="title rest">Rest</div><div class="sub">Meal prep · recovery</div></div>
+    </div>
+  </section>
+
+  <!-- =================== PROGRESSION =================== -->
+  <section class="section">
+    <div class="section-head">
+      <div class="section-num">04</div>
+      <h2 class="section-title">Progression Model</h2>
+    </div>
+    <div class="rules">
+      <div class="rule">
+        <div class="n">RULE 01</div>
+        <div class="t">Double Progression</div>
+        <div class="d">Add reps until you hit the top of the rep range for ALL prescribed sets. Then add weight the next session and reset to the bottom of the range.</div>
+      </div>
+      <div class="rule">
+        <div class="n">RULE 02</div>
+        <div class="t">Smallest Useful Jumps</div>
+        <div class="d">Compounds: +2.5 kg when ready. Upper-body isolations: +1.25 kg (or +1 rep twice). Consistency beats jumps.</div>
+      </div>
+      <div class="rule">
+        <div class="n">RULE 03</div>
+        <div class="t">RPE Governs Volume</div>
+        <div class="d">If your top set is RPE 9+ with form breaking, don't add. If it's RPE 6, add weight, not reps. Autoregulate.</div>
+      </div>
+      <div class="rule">
+        <div class="n">RULE 04</div>
+        <div class="t">Deload Protocol</div>
+        <div class="d">Weeks 4 & 8: use ~60% of last week's working weights, halve the sets. Same exercises, same movement grooves — just less.</div>
+      </div>
+      <div class="rule">
+        <div class="n">RULE 05</div>
+        <div class="t">Never Skip The Main Lift</div>
+        <div class="d">If time-crunched, drop accessories. The first compound of each session is the non-negotiable. Skipping it = skipping the stimulus.</div>
+      </div>
+      <div class="rule">
+        <div class="n">RULE 06</div>
+        <div class="t">Log Everything</div>
+        <div class="d">If it's not logged, it didn't happen. The tracker below is the single source of truth for what you lifted last time — beat it.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================== NUTRITION =================== -->
+  <section id="nutrition" class="section">
+    <div class="section-head">
+      <div class="section-num">05</div>
+      <h2 class="section-title">Nutrition Framework</h2>
+    </div>
+    <p style="color:var(--text-dim);max-width:760px;margin-bottom:20px">Based on your stats (92kg, 23% BF, lightly-to-moderately active 5 days/week), your maintenance sits around 2,700 kcal. The program runs on a modest ~450 kcal deficit — aggressive enough for ~0.6 kg/week fat loss, gentle enough to preserve strength and training output.</p>
+
+    <div class="macros">
+      <div class="macro accent"><div class="n">CALORIES</div><div class="big">2,250<span class="unit">kcal</span></div><div class="desc">Weeks 1–8. Drop to 2,100 in weeks 9–12 if scale stalls &gt;10 days.</div></div>
+      <div class="macro"><div class="n">PROTEIN</div><div class="big">190<span class="unit">g</span></div><div class="desc">Non-negotiable. ~2.1 g/kg. 4 meals × 40–50g.</div></div>
+      <div class="macro"><div class="n">CARBS</div><div class="big">220<span class="unit">g</span></div><div class="desc">Bias around training (pre + post). Fuel for compounds.</div></div>
+      <div class="macro"><div class="n">FATS</div><div class="big">65<span class="unit">g</span></div><div class="desc">Minimum for hormones. Prioritize mono-unsaturated + omega-3.</div></div>
+    </div>
+
+    <details class="collapser" style="margin-top:18px">
+      <summary>Practical execution rules</summary>
+      <div style="padding:18px 20px;background:var(--surface);border:1px solid var(--border);border-top:0">
+        <ul style="list-style:none;display:grid;gap:10px;color:var(--text-dim);font-size:13.5px">
+          <li>▸ <strong style="color:var(--text)">Weigh in daily</strong>, average the weekly numbers on Sunday. Day-to-day weight is noise.</li>
+          <li>▸ <strong style="color:var(--text)">Sleep 7+ hours.</strong> &lt;6 hrs doubles hunger hormones and halves fat loss. This is not optional in a cut.</li>
+          <li>▸ <strong style="color:var(--text)">10,000 steps/day minimum</strong> — this is the biggest lever outside lifting.</li>
+          <li>▸ <strong style="color:var(--text)">Two "refeed" days/month</strong> at maintenance calories (higher carbs) to reset leptin.</li>
+          <li>▸ <strong style="color:var(--text)">Hydrate:</strong> 3.5 L water/day. Thirst is often read as hunger.</li>
+          <li>▸ <strong style="color:var(--text)">Alcohol:</strong> ≤1 session/week, ≤3 drinks. It blunts protein synthesis for 24+ hours.</li>
+          <li>▸ <strong style="color:var(--text)">Creatine monohydrate:</strong> 5g/day. The single highest-evidence supplement for recomps.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- =================== TRACKER =================== -->
+  <section id="tracker" class="section">
+    <div class="section-head">
+      <div class="section-num">06</div>
+      <h2 class="section-title">Exercise Tracker</h2>
+    </div>
+    <p style="color:var(--text-dim);max-width:700px;margin-bottom:18px">Every set of every exercise, every training day. Your data lives in this browser (localStorage). The reset button at the end of each month clears the log but preserves your last entry as a baseline for the next block.</p>
+
+    <div class="tracker">
+      <div class="tracker-top">
+        <div class="left">
+          <div class="selector">
+            <label>Week</label>
+            <select id="weekSelect"></select>
+          </div>
+          <div id="phaseIndicator" class="phasepill">Phase 1</div>
+        </div>
+        <div class="right">
+          <button class="btn ghost sm" id="toggleHistory">History</button>
+          <button class="btn ghost sm" id="exportBtn">Export</button>
+          <button class="btn danger sm" id="resetBtn">Reset Month</button>
+        </div>
+      </div>
+
+      <div class="daytabs" id="dayTabs"></div>
+
+      <div id="banner"></div>
+
+      <div class="exlist" id="exerciseList">
+        <!-- populated by JS -->
+      </div>
+
+      <div class="extras">
+        <div class="field">
+          <label>Bodyweight today (kg)</label>
+          <input type="number" step="0.1" id="bwInput" placeholder="e.g. 91.4">
+        </div>
+        <div class="field">
+          <label>Session notes · energy / sleep / soreness</label>
+          <textarea id="notesInput" placeholder="Felt strong. Slept 7.5hrs. Left shoulder tight on bench."></textarea>
+        </div>
+      </div>
+
+      <div class="hist-wrap" id="histWrap">
+        <h4>Progression · This Exercise</h4>
+        <div id="histTable"></div>
+      </div>
+
+      <div class="bottombar">
+        <div class="savestate" id="saveState"><span class="dot"></span>Saved locally</div>
+        <div style="font-family:var(--font-mono);font-size:11px;color:var(--text-faint);letter-spacing:.1em" id="summary">0 / 0 sets logged</div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    RECOMP/90 · BUILT FOR PARTH · 90 DAYS, 12 WEEKS, 60 SESSIONS · v1.0
+  </footer>
+</div>
+
+<!-- RESET MODAL -->
+<div class="modal-backdrop" id="resetModal">
+  <div class="modal">
+    <h3>Reset the month?</h3>
+    <p>This clears all logged sets, bodyweight entries, and notes from the current block. Before clearing, your <strong style="color:var(--accent)">last entered weight for every exercise</strong> will be saved as a baseline for the next cycle.</p>
+    <p style="color:var(--warn)">This action cannot be undone.</p>
+    <div class="actions">
+      <button class="btn" id="resetConfirm">Yes, reset & save baseline</button>
+      <button class="btn ghost" id="resetCancel">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">Saved</div>
+
+<script>
+/* ============================================================
+   RECOMP/90 - Program Data + Tracker
+   ============================================================ */
+
+const STORAGE_KEY = 'recomp90_v1';
+
+// --- PROGRAM DEFINITION ---
+// Each day has exercises. Target reps/sets depend on phase AND whether it's a compound.
+const DAYS = [
+  {
+    id: 'push', label: 'Push', sub: 'Chest · Shoulders · Triceps',
+    exercises: [
+      { id:'bench',       name:'Barbell Bench Press',       type:'compound', note:'Pause briefly on chest. Control the negative.' },
+      { id:'inc_db',      name:'Incline DB Press',          type:'compound', note:'30° bench. Full ROM; don\'t lock out hard.' },
+      { id:'seat_ohp',    name:'Seated DB Shoulder Press',  type:'compound', note:'Elbows ~30° forward of body.' },
+      { id:'cable_fly',   name:'Cable Chest Fly',           type:'isolation',note:'Stretch deeply. Squeeze at midline.' },
+      { id:'lat_raise',   name:'DB Lateral Raise',          type:'isolation',note:'Lead with elbows. Pause at top.' },
+      { id:'rope_pd',     name:'Rope Tricep Pushdown',      type:'isolation',note:'Split rope at bottom.' },
+      { id:'oh_tri',      name:'Overhead Cable Tricep Ext', type:'isolation',note:'Elbows stay tucked, full stretch.' }
+    ]
+  },
+  {
+    id: 'pull', label: 'Pull', sub: 'Back · Biceps · Rear Delts',
+    exercises: [
+      { id:'pullup',      name:'Pull-ups (weighted if able)', type:'compound', note:'If <8 reps bodyweight, use lat pulldown.' },
+      { id:'bb_row',      name:'Barbell Pendlay Row',        type:'compound', note:'Reset on floor each rep. Pull to sternum.' },
+      { id:'seated_row',  name:'Seated Cable Row',           type:'compound', note:'Chest up. Squeeze shoulder blades.' },
+      { id:'db_row',      name:'Single-arm DB Row',          type:'compound', note:'Full stretch, pull to hip. Slow eccentric.' },
+      { id:'face_pull',   name:'Face Pull',                  type:'isolation',note:'Elbows high. External rotate at end.' },
+      { id:'bb_curl',     name:'EZ Bar Curl',                type:'isolation',note:'No swinging. Pause at top.' },
+      { id:'ham_curl',    name:'Hammer Curl',                type:'isolation',note:'Alternate arms if form fails.' }
+    ]
+  },
+  {
+    id: 'legs', label: 'Legs', sub: 'Quad-dominant + Core',
+    exercises: [
+      { id:'squat',       name:'Back Squat',                 type:'compound', note:'Break parallel. Brace hard.' },
+      { id:'rdl',         name:'Romanian Deadlift',          type:'compound', note:'Soft knees. Hips back. Stretch hams.' },
+      { id:'leg_press',   name:'Leg Press',                  type:'compound', note:'Feet mid-platform. Don\'t lock out.' },
+      { id:'lunges',      name:'Walking DB Lunges',          type:'compound', note:'12 steps per leg = 1 set.' },
+      { id:'leg_curl',    name:'Seated Leg Curl',            type:'isolation',note:'Pause 1s at peak contraction.' },
+      { id:'calf_st',     name:'Standing Calf Raise',        type:'isolation',note:'Full stretch at bottom, hold 1s.' },
+      { id:'leg_raise',   name:'Hanging Leg Raise',          type:'isolation',note:'No swinging. Tuck to chest.' }
+    ]
+  },
+  {
+    id: 'upper', label: 'Upper', sub: 'Weak-point focus',
+    exercises: [
+      { id:'inc_bb',      name:'Incline Barbell Bench',      type:'compound', note:'Upper chest emphasis. 30° angle.' },
+      { id:'chsp_row',    name:'Chest-supported T-bar Row',  type:'compound', note:'Strict. Squeeze mid-back.' },
+      { id:'arnold',      name:'Arnold Press',               type:'compound', note:'Full rotation. Control both halves.' },
+      { id:'lat_pd',      name:'Lat Pulldown',               type:'compound', note:'Neutral or wide grip. Drive elbows down.' },
+      { id:'cable_lat',   name:'Cable Lateral Raise',        type:'isolation',note:'One arm at a time. Constant tension.' },
+      { id:'db_curl',     name:'Incline DB Curl',            type:'isolation',note:'Full stretch. No shoulder rotation.' },
+      { id:'cg_bench',    name:'Close-grip Bench Press',     type:'compound', note:'Shoulder-width grip. Tuck elbows.' }
+    ]
+  },
+  {
+    id: 'lower', label: 'Lower', sub: 'Posterior chain + Metabolic',
+    exercises: [
+      { id:'deadlift',    name:'Conventional Deadlift',      type:'compound', note:'Set up tight. Push floor away.' },
+      { id:'front_sq',    name:'Front Squat (or BSS)',       type:'compound', note:'Elbows high. Vertical torso.' },
+      { id:'hip_thrust',  name:'Barbell Hip Thrust',         type:'compound', note:'Chin tucked. Pause at top.' },
+      { id:'leg_ext',     name:'Leg Extension',              type:'isolation',note:'Hold peak 1s. Control down.' },
+      { id:'calf_seat',   name:'Seated Calf Raise',          type:'isolation',note:'Different fiber from standing.' },
+      { id:'ab_wheel',    name:'Ab Wheel (or Cable Crunch)', type:'isolation',note:'Brace hard. Don\'t hyperextend.' },
+      { id:'finisher',    name:'Metabolic Finisher',         type:'isolation',note:'10 min: row intervals or AMRAP circuit.' }
+    ]
+  }
+];
+
+// Set/rep scheme per phase
+function getScheme(week, type){
+  // Returns {sets, reps, rest}
+  const phase = getPhase(week);
+  const isDeload = (week === 4 || week === 8);
+  const isPeak = (week === 12);
+
+  if(isDeload){
+    return type === 'compound'
+      ? { sets:2, reps:'6–8', rest:'2 min', note:'DELOAD · ~60% of last week' }
+      : { sets:2, reps:'8–10', rest:'60s', note:'DELOAD · ~60%' };
+  }
+  if(isPeak){
+    return type === 'compound'
+      ? { sets:3, reps:'3–5', rest:'3–4 min', note:'PEAK · test top set' }
+      : { sets:3, reps:'8–12', rest:'60s', note:'PEAK · moderate' };
+  }
+  if(phase === 1){
+    return type === 'compound'
+      ? { sets:4, reps:'8–10', rest:'90s', note:'RPE 7–8' }
+      : { sets:3, reps:'10–15', rest:'60s', note:'RPE 8–9' };
+  }
+  if(phase === 2){
+    return type === 'compound'
+      ? { sets:4, reps:'6–8', rest:'2–3 min', note:'RPE 8' }
+      : { sets:3, reps:'8–12', rest:'75s', note:'RPE 8–9' };
+  }
+  if(phase === 3){
+    return type === 'compound'
+      ? { sets:5, reps:'4–6', rest:'3 min', note:'RPE 8–9' }
+      : { sets:3, reps:'10–15', rest:'45–60s', note:'+ drop set on last' };
+  }
+}
+
+function getPhase(week){
+  if(week <= 4) return 1;
+  if(week <= 8) return 2;
+  return 3;
+}
+
+function getPhaseLabel(week){
+  if(week === 4 || week === 8) return { text:`Deload · Week ${week}`, cls:'deload' };
+  if(week === 12) return { text:`Peak Test · Week 12`, cls:'peak' };
+  const p = getPhase(week);
+  const names = { 1:'Metabolic Hypertrophy', 2:'Strength Hypertrophy', 3:'Peak Definition' };
+  return { text:`Phase ${p} · ${names[p]}`, cls:'' };
+}
+
+// --- STATE ---
+let state = {
+  currentWeek: 1,
+  currentDay: 'push',
+  log: {},       // log[week][day][exerciseId] = { sets: [{w,r,done}...], bw, notes }
+  baselines: []  // array of { archivedAt, label, entries: [{dayId, exId, lastWeight, lastReps}] }
+};
+
+// --- PERSISTENCE ---
+function save(){
+  try{
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    setSaveState(true);
+  }catch(e){
+    setSaveState(false);
+    console.warn('Save failed:', e);
+  }
+}
+function load(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw){ state = Object.assign(state, JSON.parse(raw)); }
+  }catch(e){ console.warn('Load failed:', e); }
+}
+function setSaveState(ok){
+  const el = document.getElementById('saveState');
+  if(ok){ el.classList.remove('unsaved'); el.innerHTML = '<span class="dot"></span>Saved locally'; }
+  else  { el.classList.add('unsaved'); el.innerHTML = '<span class="dot"></span>Save failed'; }
+}
+
+// --- HELPERS ---
+function keyFor(week, day, exId){
+  if(!state.log[week]) state.log[week] = {};
+  if(!state.log[week][day]) state.log[week][day] = {};
+  if(!state.log[week][day][exId]) state.log[week][day][exId] = { sets:[], bw:null, notes:'' };
+  return state.log[week][day][exId];
+}
+
+// Return most recent {weight, reps} for an exercise before the current week/day
+function getLastEntry(exId, upToWeek, upToDay){
+  // search backwards through weeks; within a week, ignore later days than upToDay
+  for(let w = upToWeek; w >= 1; w--){
+    if(!state.log[w]) continue;
+    const daysOrder = DAYS.map(d => d.id);
+    const endIdx = (w === upToWeek) ? daysOrder.indexOf(upToDay) - 1 : daysOrder.length - 1;
+    for(let i = endIdx; i >= 0; i--){
+      const dayId = daysOrder[i];
+      const entry = state.log[w]?.[dayId]?.[exId];
+      if(entry && entry.sets && entry.sets.length){
+        // find last non-empty set
+        for(let s = entry.sets.length - 1; s >= 0; s--){
+          const st = entry.sets[s];
+          if(st && (st.w || st.r)){
+            return { week:w, day:dayId, weight:st.w, reps:st.r };
+          }
+        }
+      }
+    }
+  }
+  return null;
+}
+
+// Look up any baseline (from last reset) for this exercise
+function getBaselineEntry(exId){
+  if(!state.baselines || !state.baselines.length) return null;
+  // most recent baseline
+  const b = state.baselines[state.baselines.length - 1];
+  return b.entries.find(e => e.exId === exId) || null;
+}
+
+// --- RENDER ---
+function renderWeekOptions(){
+  const sel = document.getElementById('weekSelect');
+  sel.innerHTML = '';
+  for(let i = 1; i <= 12; i++){
+    const opt = document.createElement('option');
+    opt.value = i;
+    let label = `Week ${i}`;
+    if(i === 4 || i === 8) label += ' · Deload';
+    if(i === 12) label += ' · Peak';
+    opt.textContent = label;
+    sel.appendChild(opt);
+  }
+  sel.value = state.currentWeek;
+}
+
+function renderDayTabs(){
+  const tabs = document.getElementById('dayTabs');
+  tabs.innerHTML = '';
+  DAYS.forEach((d, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'daytab' + (d.id === state.currentDay ? ' active' : '');
+    btn.innerHTML = `<span class="num">DAY ${i+1}</span>${d.label}`;
+    btn.onclick = () => { state.currentDay = d.id; renderAll(); };
+    tabs.appendChild(btn);
+  });
+}
+
+function renderBanner(){
+  const banner = document.getElementById('banner');
+  const w = state.currentWeek;
+  if(w === 4 || w === 8){
+    banner.innerHTML = `<div class="banner"><strong>DELOAD WEEK</strong> — Use ~60% of last week's working weight and halve the prescribed sets. Movement quality, not load. Come back fresh next week.</div>`;
+  } else if(w === 12){
+    banner.innerHTML = `<div class="banner peak"><strong>PEAK TEST WEEK</strong> — Top sets only on main lifts (3–5 reps, RPE 9). Lower volume on accessories. Record top weights here — these become your next cycle's baselines. Take progress photos.</div>`;
+  } else {
+    banner.innerHTML = '';
+  }
+}
+
+function renderPhaseIndicator(){
+  const el = document.getElementById('phaseIndicator');
+  const p = getPhaseLabel(state.currentWeek);
+  el.className = 'phasepill ' + p.cls;
+  el.textContent = p.text;
+}
+
+function renderExercises(){
+  const host = document.getElementById('exerciseList');
+  host.innerHTML = '';
+  const day = DAYS.find(d => d.id === state.currentDay);
+  if(!day) return;
+
+  day.exercises.forEach(ex => {
+    const scheme = getScheme(state.currentWeek, ex.type);
+    const entry = keyFor(state.currentWeek, state.currentDay, ex.id);
+    // ensure correct number of set slots
+    while(entry.sets.length < scheme.sets){ entry.sets.push({ w:'', r:'', done:false }); }
+    while(entry.sets.length > scheme.sets){ entry.sets.pop(); }
+
+    const last = getLastEntry(ex.id, state.currentWeek, state.currentDay);
+    const baseline = getBaselineEntry(ex.id);
+
+    const card = document.createElement('div');
+    card.className = 'ex';
+    card.dataset.exId = ex.id;
+
+    const lastBits = [];
+    if(last){
+      lastBits.push(`<span class="pill">LAST: ${last.weight||'—'}kg × ${last.reps||'—'} reps</span>`);
+    }
+    if(baseline){
+      lastBits.push(`<span class="baseline-pill">BASELINE: ${baseline.lastWeight||'—'}kg × ${baseline.lastReps||'—'}</span>`);
+    }
+
+    card.innerHTML = `
+      <div class="ex-head">
+        <div>
+          <div class="ex-name">${ex.name}</div>
+          <div class="ex-note">${ex.note}</div>
+        </div>
+        <div class="ex-target">${scheme.sets} × ${scheme.reps} · ${scheme.rest} · ${scheme.note}</div>
+      </div>
+      ${lastBits.length ? `<div class="ex-last">${lastBits.join('')}</div>` : ''}
+      <div class="setgrid">
+        <div class="hdr">Set</div>
+        <div class="hdr">Weight (kg)</div>
+        <div class="hdr">Reps</div>
+        <div class="hdr" style="text-align:center">Done</div>
+        ${entry.sets.map((s, idx) => `
+          <div class="setnum">${idx+1}</div>
+          <input type="number" inputmode="decimal" step="0.5" placeholder="kg" data-ex="${ex.id}" data-set="${idx}" data-field="w" value="${s.w||''}" class="${s.w?'filled':''}">
+          <input type="number" inputmode="numeric" step="1" placeholder="reps" data-ex="${ex.id}" data-set="${idx}" data-field="r" value="${s.r||''}" class="${s.r?'filled':''}">
+          <div class="donecell">
+            <div class="check ${s.done?'on':''}" data-ex="${ex.id}" data-set="${idx}">${s.done?'✓':''}</div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+    host.appendChild(card);
+  });
+
+  // attach input listeners
+  host.querySelectorAll('input').forEach(inp => {
+    inp.addEventListener('input', onSetInput);
+    inp.addEventListener('focus', (e) => e.target.select());
+  });
+  host.querySelectorAll('.check').forEach(c => c.addEventListener('click', onSetCheck));
+}
+
+function onSetInput(e){
+  const { ex, set, field } = e.target.dataset;
+  const entry = keyFor(state.currentWeek, state.currentDay, ex);
+  entry.sets[set] = entry.sets[set] || {w:'', r:'', done:false};
+  entry.sets[set][field] = e.target.value;
+  e.target.classList.toggle('filled', !!e.target.value);
+  save();
+  renderSummary();
+}
+function onSetCheck(e){
+  const { ex, set } = e.target.dataset;
+  const entry = keyFor(state.currentWeek, state.currentDay, ex);
+  entry.sets[set] = entry.sets[set] || {w:'', r:'', done:false};
+  entry.sets[set].done = !entry.sets[set].done;
+  e.target.classList.toggle('on', entry.sets[set].done);
+  e.target.textContent = entry.sets[set].done ? '✓' : '';
+  save();
+  renderSummary();
+}
+
+function renderExtras(){
+  const bw = document.getElementById('bwInput');
+  const notes = document.getElementById('notesInput');
+  // use a single "session" storage per week+day
+  if(!state.log[state.currentWeek]) state.log[state.currentWeek] = {};
+  if(!state.log[state.currentWeek][state.currentDay]) state.log[state.currentWeek][state.currentDay] = {};
+  const session = state.log[state.currentWeek][state.currentDay];
+  if(!session._meta) session._meta = { bw:'', notes:'' };
+  bw.value = session._meta.bw || '';
+  notes.value = session._meta.notes || '';
+
+  bw.oninput = () => { session._meta.bw = bw.value; save(); };
+  notes.oninput = () => { session._meta.notes = notes.value; save(); };
+}
+
+function renderSummary(){
+  const day = DAYS.find(d => d.id === state.currentDay);
+  if(!day) return;
+  let total = 0, done = 0;
+  day.exercises.forEach(ex => {
+    const entry = state.log[state.currentWeek]?.[state.currentDay]?.[ex.id];
+    if(!entry) return;
+    entry.sets.forEach(s => { total++; if(s.done) done++; });
+  });
+  document.getElementById('summary').textContent = `${done} / ${total} sets completed`;
+}
+
+function renderWeekStrip(){
+  const strip = document.getElementById('weekstrip');
+  strip.innerHTML = '';
+  for(let i = 1; i <= 12; i++){
+    const box = document.createElement('div');
+    let cls = 'weekbox build';
+    if(i === 4 || i === 8) cls = 'weekbox deload';
+    if(i === 12) cls = 'weekbox peak';
+    box.className = cls;
+    box.textContent = 'W' + i;
+    strip.appendChild(box);
+  }
+}
+
+// --- HISTORY VIEW ---
+function renderHistory(){
+  const host = document.getElementById('histTable');
+  host.innerHTML = '';
+  const day = DAYS.find(d => d.id === state.currentDay);
+
+  day.exercises.forEach(ex => {
+    const rows = [];
+    for(let w = 1; w <= 12; w++){
+      const entry = state.log[w]?.[state.currentDay]?.[ex.id];
+      if(!entry || !entry.sets) continue;
+      entry.sets.forEach((s, i) => {
+        if(s.w || s.r){
+          rows.push(`<tr><td>W${w}</td><td>Set ${i+1}</td><td>${s.w||'—'} kg</td><td>${s.r||'—'} reps</td><td>${s.done?'<span style="color:var(--accent)">✓</span>':''}</td></tr>`);
+        }
+      });
+    }
+    if(rows.length){
+      host.innerHTML += `<div style="margin-bottom:22px">
+        <div style="font-family:var(--font-display);font-weight:700;font-size:16px;text-transform:uppercase;margin-bottom:6px;color:var(--accent)">${ex.name}</div>
+        <table class="hist-table"><thead><tr><th>Week</th><th>#</th><th>Load</th><th>Reps</th><th></th></tr></thead><tbody>${rows.join('')}</tbody></table>
+      </div>`;
+    }
+  });
+
+  if(!host.innerHTML){
+    host.innerHTML = '<p style="color:var(--text-dim);font-size:13px">No history yet for this day. Log some sets and they\'ll appear here.</p>';
+  }
+}
+
+// --- RESET MONTH ---
+function buildBaselineFromCurrent(){
+  // For every exercise across all days, find the last logged entry and save it
+  const entries = [];
+  DAYS.forEach(day => {
+    day.exercises.forEach(ex => {
+      // search all weeks for the most recent non-empty entry
+      let best = null;
+      for(let w = 12; w >= 1; w--){
+        const e = state.log[w]?.[day.id]?.[ex.id];
+        if(!e || !e.sets) continue;
+        for(let s = e.sets.length - 1; s >= 0; s--){
+          const st = e.sets[s];
+          if(st && (st.w || st.r)){ best = { dayId:day.id, exId:ex.id, lastWeight:st.w, lastReps:st.r, atWeek:w }; break; }
+        }
+        if(best) break;
+      }
+      if(best) entries.push(best);
+    });
+  });
+  return entries;
+}
+
+function doReset(){
+  const entries = buildBaselineFromCurrent();
+  const archive = {
+    archivedAt: new Date().toISOString(),
+    label: 'Block ending ' + new Date().toLocaleDateString(),
+    entries
+  };
+  state.baselines = state.baselines || [];
+  state.baselines.push(archive);
+  state.log = {};
+  state.currentWeek = 1;
+  state.currentDay = 'push';
+  save();
+  renderAll();
+  toast('Reset complete · baseline saved');
+  document.getElementById('resetModal').classList.remove('open');
+}
+
+// --- EXPORT ---
+function exportJSON(){
+  const blob = new Blob([JSON.stringify(state, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `recomp90_${new Date().toISOString().split('T')[0]}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('Exported');
+}
+
+// --- TOAST ---
+let toastTimer = null;
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 1800);
+}
+
+// --- WIRE UP ---
+function renderAll(){
+  renderDayTabs();
+  renderBanner();
+  renderPhaseIndicator();
+  renderExercises();
+  renderExtras();
+  renderSummary();
+  renderHistory();
+  const sel = document.getElementById('weekSelect');
+  if(sel) sel.value = state.currentWeek;
+}
+
+function init(){
+  load();
+  renderWeekStrip();
+  renderWeekOptions();
+
+  document.getElementById('weekSelect').addEventListener('change', e => {
+    state.currentWeek = parseInt(e.target.value, 10);
+    save();
+    renderAll();
+  });
+
+  document.getElementById('resetBtn').addEventListener('click', () => {
+    document.getElementById('resetModal').classList.add('open');
+  });
+  document.getElementById('resetCancel').addEventListener('click', () => {
+    document.getElementById('resetModal').classList.remove('open');
+  });
+  document.getElementById('resetConfirm').addEventListener('click', doReset);
+
+  document.getElementById('exportBtn').addEventListener('click', exportJSON);
+
+  document.getElementById('toggleHistory').addEventListener('click', () => {
+    const hw = document.getElementById('histWrap');
+    hw.classList.toggle('on');
+    if(hw.classList.contains('on')){ renderHistory(); hw.scrollIntoView({behavior:'smooth', block:'nearest'}); }
+  });
+
+  renderAll();
+}
+
+init();
+</script>
+</body>
+</html>
